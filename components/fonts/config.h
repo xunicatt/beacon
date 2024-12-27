@@ -1,0 +1,11 @@
+#pragma once
+
+#define FONT_DIGITAL_32 0
+#define FONT_DIGITAL_34 0
+#define FONT_DIGITAL_36 0
+#define FONT_DIGITAL_38 1
+#define FONT_DIGITAL_40 0
+#define FONT_DIGITAL_44 0
+#define FONT_DIGITAL_48 0
+#define FONT_DIGITAL_54 0
+#define FONT_DIGITAL_64 1

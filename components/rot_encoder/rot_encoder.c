@@ -45,6 +45,7 @@ uint8_t rot_encoder_read(rot_encoder_t* r) {
         (gpio_get_level(r->pins.a) << 1) |
         gpio_get_level(r->pins.b)
     );
+
     uint8_t c = r->data.ab_new ^ r->data.ab_old;
 
     if(c == 1 || c == 2) {

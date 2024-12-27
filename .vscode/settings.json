@@ -1,3 +1,9 @@
 {
-  "C_Cpp.intelliSenseEngine": "default"
+  "C_Cpp.intelliSenseEngine": "default",
+  "files.associations": {
+    "touch_sensor.h": "c",
+    "touch_pad.h": "c",
+    "esp_mac.h": "c",
+    "esp_lcd_panel_interface.h": "c"
+  }
 }

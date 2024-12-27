@@ -6,11 +6,13 @@
 #include <ws2812b.h>
 #include <st7789.h>
 #include <rot_encoder.h>
+#include <wifi.h>
 
 typedef struct {
     ws2812b_t led;
     st7789_t display;
     rot_encoder_t rot;
+    wifi_t wifi;
 } app_t;
 
 

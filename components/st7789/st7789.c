@@ -18,7 +18,7 @@ esp_err_t st7789_init(
     s->lvgl.lvgl_cfg = (lvgl_port_cfg_t)ESP_LVGL_PORT_INIT_CONFIG();
     s->esp_lcd.io_handle = NULL;
     s->spi.bus_cfg = (spi_bus_config_t) {
-        .max_transfer_sz = hres * 100 * 2,
+        .max_transfer_sz = ((hres * vres)/10)*sizeof(lv_color_t),
         .miso_io_num = GPIO_NUM_NC,
         .mosi_io_num = mosi,
         .quadhd_io_num = GPIO_NUM_NC,
@@ -32,7 +32,7 @@ esp_err_t st7789_init(
         .lcd_param_bits = 8,
         .pclk_hz = SPI_MASTER_FREQ_40M,
         .spi_mode = 3,
-        .trans_queue_depth = 10
+        .trans_queue_depth = 10 
     };
     s->esp_lcd.panel_handle = NULL;
     s->esp_lcd.dev_cfg = (esp_lcd_panel_dev_config_t) {
@@ -73,7 +73,7 @@ esp_err_t st7789_init(
 
     err = esp_lcd_panel_invert_color(s->esp_lcd.panel_handle, true);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to invert color on lcd panel");
-    ESP_LOGI(TAG, "lcd inver_color");
+    ESP_LOGI(TAG, "lcd invert_color");
 
     err = esp_lcd_panel_disp_on_off(s->esp_lcd.panel_handle, true);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to turn on lcd panel");
@@ -82,7 +82,7 @@ esp_err_t st7789_init(
     s->lvgl.disp_cfg = (lvgl_port_display_cfg_t) {
         .io_handle = s->esp_lcd.io_handle,
         .panel_handle = s->esp_lcd.panel_handle,
-        .buffer_size = hres * vres,
+        .buffer_size = ((hres * vres)/10)*sizeof(lv_color_t),
         .double_buffer = true,
         .hres = hres,
         .vres = vres,

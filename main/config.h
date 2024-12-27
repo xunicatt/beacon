@@ -5,6 +5,10 @@
 #include <driver/spi_master.h>
 #include <freertos/task.h>
 
+#define BEACON_OS_NAME "BeaconOS"
+#define BEACON_OS_DESC "Modern & Minimal Desktop Assistant Operation System"
+#define BEACON_VERSION "v0.1.0 alpha"
+
 #define DRIVER_WS2812B_DIN GPIO_NUM_21
 #define DRIVER_WS2812B_SPI_HOST SPI2_HOST
 #define DRIVER_WS2812B_SPI_DMA_CH SPI_DMA_CH_AUTO
@@ -27,7 +31,7 @@
 #define TASK_ROT_ENCODER_MAX_DELAY (10/portTICK_PERIOD_MS)
 #define TASK_MAIN_GUI_UPDATE (10/portTICK_PERIOD_MS)
 
-#define app_delay_ms(x) ((x)/portTICK_PERIOD_MS)
+#define app_delay_ms(x) vTaskDelay((x)/portTICK_PERIOD_MS)
 #define app_delay_sec(x) app_delay_ms((x)*1000)
 #define app_delay_min(x) app_delay_sec((x)*60)
 #define app_delay_hrs(x) app_delay_min((x)*60)

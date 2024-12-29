@@ -4,6 +4,10 @@
     "touch_sensor.h": "c",
     "touch_pad.h": "c",
     "esp_mac.h": "c",
-    "esp_lcd_panel_interface.h": "c"
+    "esp_lcd_panel_interface.h": "c",
+    "array": "c",
+    "string": "c",
+    "string_view": "c",
+    "span": "c"
   }
 }

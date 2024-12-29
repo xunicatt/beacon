@@ -6,6 +6,17 @@
 
 #define TAG "beacon"
 
+TaskHandle_t gui_handler_task = NULL;
+
+void gui_handler(void*) {
+    while(true) {
+        lv_task_handler();
+        app_delay_ms(100);
+    }
+
+    vTaskDelete(NULL);
+}
+
 esp_err_t app_init(app_t* a) {
     esp_err_t err = ESP_OK;
     err = ws2812b_init(
@@ -31,6 +42,26 @@ esp_err_t app_init(app_t* a) {
     );
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize st7789");
 
+    xTaskCreatePinnedToCore(
+        gui_handler,
+        "gui_handler",
+        2048 * 2,
+        NULL, 
+        0,
+        &gui_handler_task,
+        1
+    );
+
+    gui_boot_init(&a->gui_screens.boot);
+    xTaskCreate(
+        gui_boot_task,
+        "gui_boot_task",
+        2048 * 2,
+        &a->gui_screens.boot,
+        2,
+        &a->gui_screens.boot.task_handle
+    );
+
     err = nvs_flash_init();
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize nvs storage");
 
@@ -54,22 +85,18 @@ esp_err_t app_init(app_t* a) {
 
 esp_err_t app_run(app_t* a) {
     esp_err_t err = ESP_OK;
-    gui_boot_t gb = {0};
-    gui_boot_init(&gb);
+    vTaskDelete(a->gui_screens.boot.task_handle);
 
-    xTaskCreate(
-        gui_boot_task,
-        "gui_boot_task",
+    gui_home_init(&a->gui_screens.home, &a->rot);
+    xTaskCreatePinnedToCore(
+        gui_home_task,
+        "gui_home_task",
         4096 * 2,
-        &gb,
-        1,
-        &gb.task_handle
+        &a->gui_screens.home,
+        2,
+        &a->gui_screens.home.task_handle,
+        1
     );
-
-    while(true) {
-        lv_task_handler();
-        app_delay_ms(16);
-    }
-
+    
     return err;
 }

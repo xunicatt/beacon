@@ -7,12 +7,18 @@
 #include <st7789.h>
 #include <rot_encoder.h>
 #include <wifi.h>
+#include <boot.h>
+#include <home.h>
 
 typedef struct {
     ws2812b_t led;
     st7789_t display;
     rot_encoder_t rot;
     wifi_t wifi;
+    struct {
+        gui_boot_t boot; 
+        gui_home_t home;
+    } gui_screens;
 } app_t;
 
 

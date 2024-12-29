@@ -1,5 +1,6 @@
 #include <app.h>
 
+[[noreturn]]
 void app_main(void) {
     ESP_LOGI("main", BEACON_OS_NAME " " BEACON_VERSION);
     ESP_LOGI("main", BEACON_OS_DESC);
@@ -12,4 +13,8 @@ void app_main(void) {
 
     err = app_run(a);
     ESP_ERROR_CHECK(err);
+
+    while(true) {
+        app_delay_sec(1);
+    }
 }

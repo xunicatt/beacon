@@ -5,6 +5,7 @@
 #include <boot.h>
 
 #define TAG "beacon"
+#define WIFI_PASS "Aniket#2003@2024"
 
 TaskHandle_t gui_handler_task = NULL;
 
@@ -71,6 +72,9 @@ esp_err_t app_init(app_t* a) {
     err = wifi_scan(&a->wifi);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to scan wifi");
 
+    err = wifi_connect(&a->wifi, &a->wifi.ap_infos[0], WIFI_PASS);
+    ESP_RETURN_ON_ERROR(err, TAG, "failed to connect to wifi");
+
     err = rot_encoder_init(
         &a->rot,
         DRIVER_ROT_ENCODER_A,
@@ -91,9 +95,9 @@ esp_err_t app_run(app_t* a) {
     xTaskCreatePinnedToCore(
         gui_home_task,
         "gui_home_task",
-        4096 * 2,
+        2048 * 2,
         &a->gui_screens.home,
-        2,
+        0,
         &a->gui_screens.home.task_handle,
         1
     );

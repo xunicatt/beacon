@@ -20,7 +20,7 @@ esp_err_t app_init(app_t* a) {
         DRIVER_WS2812B_SPI_DMA_CH
     );
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize ws2812b");
-    ws2812b_set_color(&a->led, 0x001000);
+    ws2812b_set_color(&a->led, 0x100000);
     err = ws2812b_update(&a->led);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to update color in ws2812b");
 
@@ -88,6 +88,10 @@ esp_err_t app_run(app_t* a) {
     assert(a != NULL);
     esp_err_t err = ESP_OK;
     vTaskDelete(a->gui.boot.handler);
+
+    ws2812b_set_color(&a->led, 0x001000);
+    err = ws2812b_update(&a->led);
+    ESP_RETURN_ON_ERROR(err, TAG, "failed to update color in ws2812b");
 
     err = gui_home_init(&a->gui.home, &a->rot);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize gui_home");

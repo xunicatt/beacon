@@ -18,7 +18,8 @@ typedef struct {
     struct {
         gui_boot_t boot; 
         gui_home_t home;
-    } gui_screens;
+        TaskHandle_t handler;
+    } gui;
 } app_t;
 
 

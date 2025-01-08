@@ -9,16 +9,12 @@ void app_main(void) {
     ESP_LOGI(TAG, BEACON_OS_DESC);
 
     esp_err_t ret = ESP_OK;
-    app_t *a = calloc(1, sizeof(app_t)) ;
-    if(a == NULL) {
-        ESP_LOGE(TAG, "failed to allocate memory fro app_t");
-        goto halt;
-    }
+    app_t a = {0};
 
-    ret = app_init(a);
+    ret = app_init(&a);
     ESP_GOTO_ON_ERROR(ret, halt, TAG, "failed to initialize app");
 
-    ret = app_run(a);
+    ret = app_run(&a);
     ESP_GOTO_ON_ERROR(ret, halt, TAG, "failed to run app");
 
 halt:

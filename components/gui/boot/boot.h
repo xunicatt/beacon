@@ -8,7 +8,7 @@
 #include <config.h>
 
 typedef struct {
-   TaskHandle_t task_handle; 
+   TaskHandle_t handler; 
     lv_obj_t* loading_circles[GUI_BOOT_LOADING_CIRCLES_COUNT];
 } gui_boot_t;
 

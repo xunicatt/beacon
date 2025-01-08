@@ -8,7 +8,7 @@
 #include <rot_encoder.h>
 
 typedef struct {
-    TaskHandle_t task_handle; 
+    TaskHandle_t handler; 
     lv_obj_t* text;
     rot_encoder_t* r;
 } gui_home_t;

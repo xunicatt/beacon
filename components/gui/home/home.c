@@ -3,6 +3,8 @@
 #include <rot_encoder.h>
 
 esp_err_t gui_home_init(gui_home_t* gh, rot_encoder_t* r) {
+    assert(gh != NULL);
+    assert(r != NULL);
     lv_obj_t* screen = lv_scr_act();
     lv_obj_clean(screen);
 
@@ -18,6 +20,7 @@ esp_err_t gui_home_init(gui_home_t* gh, rot_encoder_t* r) {
 }
 
 void gui_home_task(void* x) {
+    assert(x != NULL);
     gui_home_t* a = x;
     uint8_t val = 0, old_val = 0;
     char data[4] = "000";

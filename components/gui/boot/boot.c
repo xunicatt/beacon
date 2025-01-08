@@ -2,7 +2,7 @@
 
 esp_err_t gui_boot_init(gui_boot_t* gb) {
     assert(gb != NULL);
-    gb->task_handle = NULL;
+    gb->handler= NULL;
     // main container
     lv_obj_t* screen = lv_scr_act();
     lv_obj_set_layout(screen, LV_LAYOUT_FLEX);
@@ -46,6 +46,7 @@ esp_err_t gui_boot_init(gui_boot_t* gb) {
 }
 
 void gui_boot_task(void* x) {
+    assert(x != NULL);
     // anim
     lv_obj_t** cir= ((gui_boot_t*)x)->loading_circles;
     uint8_t i = 0;

@@ -2,24 +2,15 @@
 #include <nvs_flash.h>
 #include <fonts.h>
 #include <lvgl.h>
+#include <gui.h>
 #include <boot.h>
 
 #define TAG "beacon"
 // temporary hard coded
 #define WIFI_PASS "Aniket#2003@2024"
 
-static TaskHandle_t gui_handler_task = NULL;
-
-static void gui_handler(void*) {
-    while(true) {
-        lv_task_handler();
-        app_delay_ms(100);
-    }
-
-    vTaskDelete(NULL);
-}
-
 esp_err_t app_init(app_t* a) {
+    assert(a != NULL);
     esp_err_t err = ESP_OK;
     err = ws2812b_init(
         &a->led,
@@ -54,19 +45,19 @@ esp_err_t app_init(app_t* a) {
         2048 * 2,
         NULL, 
         0,
-        &gui_handler_task,
+        &a->gui.handler,
         1
     );
 
-    err = gui_boot_init(&a->gui_screens.boot);
+    err = gui_boot_init(&a->gui.boot);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize gui_boot");
     xTaskCreate(
         gui_boot_task,
         "gui_boot_task",
         2048 * 2,
-        &a->gui_screens.boot,
+        &a->gui.boot,
         2,
-        &a->gui_screens.boot.task_handle
+        &a->gui.boot.handler
     );
 
     err = nvs_flash_init();
@@ -94,18 +85,19 @@ esp_err_t app_init(app_t* a) {
 }
 
 esp_err_t app_run(app_t* a) {
+    assert(a != NULL);
     esp_err_t err = ESP_OK;
-    vTaskDelete(a->gui_screens.boot.task_handle);
+    vTaskDelete(a->gui.boot.handler);
 
-    err = gui_home_init(&a->gui_screens.home, &a->rot);
+    err = gui_home_init(&a->gui.home, &a->rot);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize gui_home");
     xTaskCreatePinnedToCore(
         gui_home_task,
         "gui_home_task",
         2048 * 2,
-        &a->gui_screens.home,
+        &a->gui.home,
         0,
-        &a->gui_screens.home.task_handle,
+        &a->gui.home.handler,
         1
     );
   

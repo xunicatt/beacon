@@ -3,11 +3,9 @@
 #include <esp_log.h>
 #include <esp_check.h>
 #include <string.h>
+#include <config.h>
 
 #define TAG "wifi"
-#define WIFI_MAX_RETRY 25
-#define WIFI_CONNECTED_BIT BIT0
-#define WIFI_FAIL_BIT BIT1
 
 static EventGroupHandle_t wifi_event_group = NULL; 
 static uint8_t wifi_connect_retry_count = 0;

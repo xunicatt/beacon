@@ -5,12 +5,11 @@
 #include <freertos/task.h>
 #include <esp_err.h>
 #include <lvgl.h>
-
-#define GUI_BOOT_LOADIN_CIRCLES_COUNT 6
+#include <config.h>
 
 typedef struct {
    TaskHandle_t task_handle; 
-    lv_obj_t* loading_circles[GUI_BOOT_LOADIN_CIRCLES_COUNT];
+    lv_obj_t* loading_circles[GUI_BOOT_LOADING_CIRCLES_COUNT];
 } gui_boot_t;
 
 esp_err_t gui_boot_init(gui_boot_t* gb);

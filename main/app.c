@@ -5,11 +5,12 @@
 #include <boot.h>
 
 #define TAG "beacon"
+// temporary hard coded
 #define WIFI_PASS "Aniket#2003@2024"
 
-TaskHandle_t gui_handler_task = NULL;
+static TaskHandle_t gui_handler_task = NULL;
 
-void gui_handler(void*) {
+static void gui_handler(void*) {
     while(true) {
         lv_task_handler();
         app_delay_ms(100);
@@ -27,9 +28,10 @@ esp_err_t app_init(app_t* a) {
         DRIVER_WS2812B_SPI_HOST,
         DRIVER_WS2812B_SPI_DMA_CH
     );
-    ESP_RETURN_ON_ERROR(err, TAG, "failed tp initialize ws2812b");
+    ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize ws2812b");
     ws2812b_set_color(&a->led, 0x001000);
-    ws2812b_update(&a->led);
+    err = ws2812b_update(&a->led);
+    ESP_RETURN_ON_ERROR(err, TAG, "failed to update color in ws2812b");
 
     err = st7789_init(
         &a->display,
@@ -43,6 +45,9 @@ esp_err_t app_init(app_t* a) {
     );
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize st7789");
 
+    // wait for sometimes to let the display intialize
+    app_delay_sec(1);
+
     xTaskCreatePinnedToCore(
         gui_handler,
         "gui_handler",
@@ -53,7 +58,8 @@ esp_err_t app_init(app_t* a) {
         1
     );
 
-    gui_boot_init(&a->gui_screens.boot);
+    err = gui_boot_init(&a->gui_screens.boot);
+    ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize gui_boot");
     xTaskCreate(
         gui_boot_task,
         "gui_boot_task",
@@ -84,14 +90,15 @@ esp_err_t app_init(app_t* a) {
     );
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize rotary encoder");
 
-    return err;
+    return ESP_OK;
 }
 
 esp_err_t app_run(app_t* a) {
     esp_err_t err = ESP_OK;
     vTaskDelete(a->gui_screens.boot.task_handle);
 
-    gui_home_init(&a->gui_screens.home, &a->rot);
+    err = gui_home_init(&a->gui_screens.home, &a->rot);
+    ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize gui_home");
     xTaskCreatePinnedToCore(
         gui_home_task,
         "gui_home_task",
@@ -101,6 +108,10 @@ esp_err_t app_run(app_t* a) {
         &a->gui_screens.home.task_handle,
         1
     );
-    
-    return err;
+  
+    while(true) {
+        app_delay_sec(1);
+    }
+
+    return ESP_OK;
 }

@@ -2,7 +2,7 @@
 #define __FONTS_H
 
 #include <lvgl.h>
-#include "config.h"
+#include <config.h>
 
 #if FONT_DIGITAL_32 
 extern lv_font_t font_digital_32;

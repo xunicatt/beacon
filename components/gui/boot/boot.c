@@ -29,12 +29,12 @@ esp_err_t gui_boot_init(gui_boot_t* gb) {
     lv_obj_set_style_border_side(loading_cont, LV_BORDER_SIDE_NONE, LV_PART_MAIN);
 
     // loading dots
-    for(uint8_t i = 0; i < GUI_BOOT_LOADIN_CIRCLES_COUNT; i++) {
+    for(uint8_t i = 0; i < GUI_BOOT_LOADING_CIRCLES_COUNT; i++) {
         gb->loading_circles[i] = lv_obj_create(loading_cont);
     }
        
     // reseting the dots
-    for(uint8_t i = 0; i < 6; i++) {
+    for(uint8_t i = 0; i < GUI_BOOT_LOADING_CIRCLES_COUNT; i++) {
         lv_obj_set_height(gb->loading_circles[i], 10);
         lv_obj_set_width(gb->loading_circles[i], 10);
         lv_obj_set_style_border_side(gb->loading_circles[i], LV_BORDER_SIDE_NONE, LV_PART_MAIN);
@@ -50,8 +50,8 @@ void gui_boot_task(void* x) {
     lv_obj_t** cir= ((gui_boot_t*)x)->loading_circles;
     uint8_t i = 0;
     while(true) {
-        if(i == 6) {
-            for(uint8_t x = 0; x < 6; x++) {
+        if(i == GUI_BOOT_LOADING_CIRCLES_COUNT) {
+            for(uint8_t x = 0; x < GUI_BOOT_LOADING_CIRCLES_COUNT; x++) {
                 lv_obj_set_style_bg_color(cir[x], lv_color_hex(0x005F79), LV_PART_MAIN);
                 vTaskDelay(150/portTICK_PERIOD_MS);
             }

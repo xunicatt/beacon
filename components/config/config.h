@@ -10,6 +10,12 @@
 #define BEACON_OS_DESC "Modern & Minimal Desktop Assistant Operation System"
 #define BEACON_VERSION "v0.1.0 alpha"
 
+// OS TIME CONFIG
+#define SNTP_TIME_SERVER "time.google.com"
+#define SNTP_TIME_ZONE "GMT-05:30"
+#define SNTP_UPDATE_INTERVAL (60 * 60 * 1000) //in ms
+#define SNTP_MAX_RETRY_COUNT 10
+
 // FONTS
 #define FONT_DIGITAL_32 0
 #define FONT_DIGITAL_34 0
@@ -23,12 +29,13 @@
 
 #define FONT_DSEG14_MODERN_64_BOLD 0
 #define FONT_DSEG14_MODERN_64 0
-#define FONT_DSEG14_MODERN_54 1
+#define FONT_DSEG14_MODERN_54 0
 #define FONT_DSEG14_MODERN_48 0
-#define FONT_DSEG14_MODERN_40 0
+#define FONT_DSEG14_MODERN_40 1
 #define FONT_DSEG14_MODERN_36 0
 #define FONT_DSEG14_MODERN_32 0
 #define FONT_DSEG14_MODERN_28 0
+#define FONT_DSEG14_MODERN_18 1
 
 
 // WS2812B LED DRIVER CONFIGS

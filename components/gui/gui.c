@@ -5,8 +5,7 @@
 
 void gui_handler(void*) {
     while(true) {
-        lv_task_handler();
-        vTaskDelay(100/portTICK_PERIOD_MS);
+        vTaskDelay(lv_task_handler()/portTICK_PERIOD_MS);
     }
 
     vTaskDelete(NULL);

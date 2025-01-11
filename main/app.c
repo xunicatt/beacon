@@ -4,6 +4,7 @@
 #include <lvgl.h>
 #include <gui.h>
 #include <boot.h>
+#include <clock.h>
 
 #define TAG "beacon"
 // temporary hard coded
@@ -37,7 +38,7 @@ esp_err_t app_init(app_t* a) {
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize st7789");
 
     // wait for sometimes to let the display intialize
-    app_delay_sec(1);
+    app_delay_sec(5);
 
     xTaskCreatePinnedToCore(
         gui_handler,
@@ -63,6 +64,12 @@ esp_err_t app_init(app_t* a) {
     err = nvs_flash_init();
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize nvs storage");
 
+    err = esp_netif_init();
+    ESP_RETURN_ON_ERROR(err, TAG, "failed to intialize netif");
+
+    err =  esp_event_loop_create_default();
+    ESP_RETURN_ON_ERROR(err, TAG, "failed to create event loop");
+
     err = wifi_init(&a->wifi);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize wifi");
 
@@ -71,6 +78,11 @@ esp_err_t app_init(app_t* a) {
 
     err = wifi_connect(&a->wifi, &a->wifi.ap_infos[0], WIFI_PASS);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to connect to wifi");
+
+    err = clock_init();
+    ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize clock");
+
+    clock_wait_for_sync();
 
     err = rot_encoder_init(
         &a->rot,
@@ -93,7 +105,10 @@ esp_err_t app_run(app_t* a) {
     err = ws2812b_update(&a->led);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to update color in ws2812b");
 
-    err = gui_home_init(&a->gui.home, &a->rot);
+    ESP_LOGI(TAG, "system_time: %s", clock_get_time_str());
+    ESP_LOGI(TAG, "system_date: %s", clock_get_date_str());
+
+    err = gui_home_init(&a->gui.home);
     ESP_RETURN_ON_ERROR(err, TAG, "failed to initialize gui_home");
     xTaskCreatePinnedToCore(
         gui_home_task,

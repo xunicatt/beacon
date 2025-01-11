@@ -50,12 +50,6 @@ esp_err_t wifi_init(wifi_t* w) {
     assert(w != NULL);
     esp_err_t err = ESP_OK;
 
-    err = esp_netif_init();
-    ESP_RETURN_ON_ERROR(err, TAG, "failed to intialize netif");
-
-    err =  esp_event_loop_create_default();
-    ESP_RETURN_ON_ERROR(err, TAG, "failed to create event loop");
-
     w->sta_netif = esp_netif_create_default_wifi_sta();
     assert(w->sta_netif != NULL);
 

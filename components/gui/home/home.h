@@ -9,11 +9,17 @@
 
 typedef struct {
     TaskHandle_t handler; 
-    lv_obj_t* text;
-    rot_encoder_t* r;
+    struct {
+        struct {
+            lv_obj_t* hr;
+            lv_obj_t* min;
+            lv_obj_t* sec;
+            lv_obj_t* per;
+        } clock;
+    } childs;
 } gui_home_t;
 
-esp_err_t gui_home_init(gui_home_t* gh, rot_encoder_t* r);
+esp_err_t gui_home_init(gui_home_t* gh);
 void gui_home_task(void* x);
 
 #endif

@@ -56,5 +56,8 @@ extern lv_font_t font_dseg14_modern_32;
 #if FONT_DSEG14_MODERN_28
 extern lv_font_t font_dseg14_modern_28;
 #endif
+#if FONT_DSEG14_MODERN_18
+extern lv_font_t font_dseg14_modern_18;
+#endif
 
 #endif
